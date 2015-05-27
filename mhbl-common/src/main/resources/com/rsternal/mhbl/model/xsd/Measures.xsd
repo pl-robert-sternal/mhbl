@@ -1,0 +1,58 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<schema xmlns="http://www.w3.org/2001/XMLSchema" targetNamespace="http://mhbl.rsternal.com/Measures"
+        xmlns:mhbl="http://mhbl.rsternal.com/Measures" elementFormDefault="qualified"
+        xs:minVersion="1.1" xmlns:xs="http://www.w3.org/2007/XMLSchema-versioning">
+
+
+    <complexType name="MeasureType">
+        <sequence>
+            <element name="value">
+                <complexType>
+                    <complexContent>
+                        <extension base="mhbl:MeasureValueType"></extension>
+                    </complexContent>
+                </complexType>
+            </element>
+        </sequence>
+        <attribute name="name"/>
+    </complexType>
+    <complexType name="TagType">
+        <sequence>
+            <element maxOccurs="unbounded" name="name"/>
+        </sequence>
+    </complexType>
+    <complexType name="MeasureValueType">
+        <choice>
+            <element minOccurs="0" maxOccurs="1" name="NumericValue" type="float"/>
+            <element minOccurs="0" maxOccurs="1" name="DescribeValue" type="string"/>
+            <element minOccurs="0" maxOccurs="1" name="BooleanValue" type="boolean"/>
+        </choice>
+    </complexType>
+    <complexType name="MetaDataType">
+        <sequence>
+            <element name="tag" type="mhbl:TagType" minOccurs="0"/>
+            <element name="time" type="dateTime"/>
+        </sequence>
+    </complexType>
+    <complexType name="BloodPressureType">
+        <complexContent>
+            <extension base="mhbl:MetaDataType">
+                <sequence>
+                    <element name="systolic" type="mhbl:MeasureType"/>
+                    <element name="diastolic" type="mhbl:MeasureType"/>
+                    <element name="pulse" type="mhbl:MeasureType"/>
+                </sequence>
+            </extension>
+        </complexContent>
+    </complexType>
+    <element name="Measures">
+        <complexType>
+            <choice>
+                <sequence>
+                    <element maxOccurs="unbounded" name="BloodPressure"
+                             type="mhbl:BloodPressureType"/>
+                </sequence>
+            </choice>
+        </complexType>
+    </element>
+</schema>
