@@ -36,40 +36,26 @@ public class MhblController {
 
     @RequestMapping(value = "/measure/{id}", method = RequestMethod.GET, headers = "Accept=application/json")
     @ResponseBody
-    public BloodPressure getMeasure(@PathVariable int id) {
+    public BloodPressure getMeasure(@PathVariable int id) throws ServiceDataNotFoundException {
 
-        List<BloodPressure> measures = null;
-        try {
-            measures = measuresService.findAll();
-        } catch (ServiceDataNotFoundException e) {
-            e.printStackTrace();
-        }
+        List<BloodPressure> measures = measuresService.findAll();
         return measures != null && measures.size() > id ? measures.get(id) : null;
     }
 
     @RequestMapping(value = "/measure", method = RequestMethod.GET, headers = "Accept=application/json")
     @PreAuthorize("permitAll")
     @ResponseBody
-    public List<BloodPressure> getAllMeasures() {
-        List<BloodPressure> measures = null;
-        try {
-            measures = measuresService.findAll();
-        } catch (ServiceDataNotFoundException e) {
-            e.printStackTrace();
-        }
-        return measures;
+    public List<BloodPressure> getAllMeasures() throws ServiceDataNotFoundException {
+        return measuresService.findAll();
     }
 
     @RequestMapping(value = "/measure", method = RequestMethod.PUT, headers = "Accept=application/json")
     @PreAuthorize("permitAll")
     @ResponseBody
-    public BloodPressure addBloodPressure(@RequestBody BloodPressure bloodPressure) {
-        try {
-            measuresService.add(bloodPressure);
-        } catch (AddServiceOperationException e) {
-            e.printStackTrace();
-        }
+    public BloodPressure addBloodPressure(@RequestBody BloodPressure bloodPressure)
+            throws AddServiceOperationException {
 
+        measuresService.add(bloodPressure);
         return bloodPressure;
     }
 
