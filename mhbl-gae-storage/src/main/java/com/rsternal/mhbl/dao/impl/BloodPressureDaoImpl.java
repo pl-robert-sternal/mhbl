@@ -6,10 +6,9 @@ import com.rsternal.mhbl.dao.exceptions.DaoDataNotFoundException;
 import com.rsternal.mhbl.dao.exceptions.DeleteDaoOperationException;
 import com.rsternal.mhbl.dao.exceptions.UpdateDaoOperationException;
 import com.rsternal.mhbl.dao.model.BloodPressureEntity;
-import org.springframework.beans.factory.annotation.Autowired;
 
 import javax.persistence.EntityManager;
-import javax.persistence.EntityManagerFactory;
+import javax.persistence.PersistenceContext;
 import javax.persistence.TypedQuery;
 import java.util.ArrayList;
 import java.util.Date;
@@ -17,11 +16,10 @@ import java.util.List;
 
 public class BloodPressureDaoImpl implements BloodPressureDao {
 
-    @Autowired
-    private EntityManagerFactory emf;
+    @PersistenceContext
+    private EntityManager em;
 
     public void add(BloodPressureEntity entity) throws AddDaoOperationException {
-        EntityManager em = emf.createEntityManager();
         em.getTransaction().begin();
         em.persist(entity);
         em.flush();
@@ -29,7 +27,7 @@ public class BloodPressureDaoImpl implements BloodPressureDao {
     }
 
     public List<BloodPressureEntity> findAll() {
-        TypedQuery<BloodPressureEntity> q = emf.createEntityManager().createNamedQuery("BloodPressureEntity.findAll",
+        TypedQuery<BloodPressureEntity> q = em.createNamedQuery("BloodPressureEntity.findAll",
                 BloodPressureEntity.class);
         List<BloodPressureEntity> results = q.getResultList();
         results = results == null ? new ArrayList<BloodPressureEntity>() : results;
@@ -39,7 +37,7 @@ public class BloodPressureDaoImpl implements BloodPressureDao {
 
     @Override
     public <OWNER> List<BloodPressureEntity> findAllForOwner(OWNER owner) {
-        TypedQuery<BloodPressureEntity> q = emf.createEntityManager().createNamedQuery("BloodPressureEntity.findAllForOwner",
+        TypedQuery<BloodPressureEntity> q = em.createNamedQuery("BloodPressureEntity.findAllForOwner",
                 BloodPressureEntity.class);
         List<BloodPressureEntity> results = q.getResultList();
         results = results == null ? new ArrayList<BloodPressureEntity>() : results;
@@ -57,15 +55,11 @@ public class BloodPressureDaoImpl implements BloodPressureDao {
         return null;
     }
 
+    @Override
     public void delete(BloodPressureEntity e) throws DeleteDaoOperationException {
-
-        EntityManager em = emf.createEntityManager();
-        em.getTransaction().begin();
-        em.remove(e);
-        em.flush();
-        em.getTransaction().commit();
     }
 
+    @Override
     public void update(BloodPressureEntity e) throws UpdateDaoOperationException {
 
     }

@@ -21,6 +21,7 @@ import com.rsternal.mhbl.main.service.exceptions.UpdateServiceOperationException
 
 import dao.model.builders.security.UserBuilder;
 import dao.model.security.User;
+import org.springframework.transaction.annotation.Transactional;
 
 public class UserServiceImpl implements Service<User> {
 
@@ -90,22 +91,20 @@ public class UserServiceImpl implements Service<User> {
         return users;
     }
 
+    @Transactional(value = "transactionManager")
     @Override
     public void update(User newUserSetup) throws UpdateServiceOperationException {
         try {
-            User currentUserSetup = this.findById(newUserSetup.getLogin());
-            UserEntity userEntity = new UserEntityBuilder()
-                    .withFirstName(newUserSetup.getFirstName())
-                    .withLastName(newUserSetup.getLastName())
-                    .withLogin(currentUserSetup.getLogin())
-                    .withEmail(currentUserSetup.getEmail())
-                    .withCreatedDate(currentUserSetup.getCreatedDate())
-                    .withPassword(newUserSetup.getPassword())
-                    .withClosedDate(calculateCloseDate(newUserSetup, currentUserSetup))
-                    .withActive(newUserSetup.isActive())
-                    .build();
-            dao.update(userEntity);
-        } catch (ServiceDataNotFoundException | UpdateDaoOperationException e) {
+            UserEntity currentUserSetup = dao.findById(newUserSetup.getLogin());
+            currentUserSetup.setFirstName(newUserSetup.getFirstName());
+            currentUserSetup.setLastName(newUserSetup.getLastName());
+            currentUserSetup.setCreatedDate(newUserSetup.getCreatedDate());
+            currentUserSetup.setClosedDate(calculateCloseDate(newUserSetup, new UserBuilder()
+                    .withActive(currentUserSetup.isActive()).withClosedDate(currentUserSetup.getClosedDate()).build()));
+            currentUserSetup.setPassword(newUserSetup.getPassword());
+            currentUserSetup.setActive(newUserSetup.isActive());
+            dao.update(currentUserSetup);
+        } catch (DaoDataNotFoundException | UpdateDaoOperationException e) {
             throw new UpdateServiceOperationException(e);
         }
     }

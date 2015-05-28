@@ -54,7 +54,7 @@ public class BloodMeasureServiceImpl implements Service<BloodPressure> {
         }
     }
 
-    public <String> BloodPressure findById(String id) throws ServiceDataNotFoundException {
+    public <T> BloodPressure findById(T id) throws ServiceDataNotFoundException {
         throw new ServiceDataNotFoundException();
     }
 

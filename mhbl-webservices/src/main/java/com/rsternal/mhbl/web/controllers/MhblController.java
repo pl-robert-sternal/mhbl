@@ -3,8 +3,11 @@ package com.rsternal.mhbl.web.controllers;
 import com.rsternal.mhbl.main.service.Service;
 import com.rsternal.mhbl.main.service.exceptions.AddServiceOperationException;
 import com.rsternal.mhbl.main.service.exceptions.ServiceDataNotFoundException;
+import com.rsternal.mhbl.main.service.exceptions.UpdateServiceOperationException;
 import dao.model.measures.BloodPressure;
 import dao.model.security.User;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.security.access.prepost.PreAuthorize;
@@ -28,6 +31,8 @@ public class MhblController {
     @Autowired
     @Qualifier("userService")
     private Service<User> userService;
+
+    private Logger logger = LoggerFactory.getLogger(MhblController.class);
 
     @RequestMapping(value = "/measure/{id}", method = RequestMethod.GET, headers = "Accept=application/json")
     @ResponseBody
@@ -66,5 +71,12 @@ public class MhblController {
         }
 
         return bloodPressure;
+    }
+
+    @PreAuthorize("permitAll")
+    @RequestMapping(value = "/user", method = RequestMethod.PUT, headers = "Accept=application/json")
+    public void updateUser(@RequestBody User user) throws UpdateServiceOperationException {
+        logger.info("User ", user);
+        userService.update(user);
     }
 }
