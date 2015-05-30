@@ -1,33 +1,5 @@
 package com.rsternal.mhbl.main.service;
 
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertFalse;
-import static org.junit.Assert.assertNotNull;
-import static org.junit.Assert.assertNull;
-import static org.junit.Assert.assertTrue;
-import static org.mockito.Matchers.any;
-import static org.mockito.Matchers.anyString;
-import static org.mockito.Mockito.doNothing;
-import static org.mockito.Mockito.doThrow;
-import static org.mockito.Mockito.verify;
-import static org.mockito.Mockito.when;
-import static org.mockito.internal.verification.VerificationModeFactory.times;
-
-import java.text.ParseException;
-import java.text.SimpleDateFormat;
-import java.util.ArrayList;
-import java.util.Calendar;
-import java.util.Date;
-import java.util.GregorianCalendar;
-import java.util.List;
-
-import org.junit.Test;
-import org.junit.runner.RunWith;
-import org.mockito.ArgumentCaptor;
-import org.mockito.InjectMocks;
-import org.mockito.Mock;
-import org.mockito.runners.MockitoJUnitRunner;
-
 import com.rsternal.mhbl.dao.exceptions.AddDaoOperationException;
 import com.rsternal.mhbl.dao.exceptions.DaoDataNotFoundException;
 import com.rsternal.mhbl.dao.exceptions.UpdateDaoOperationException;
@@ -38,9 +10,28 @@ import com.rsternal.mhbl.main.service.exceptions.AddServiceOperationException;
 import com.rsternal.mhbl.main.service.exceptions.ServiceDataNotFoundException;
 import com.rsternal.mhbl.main.service.exceptions.UpdateServiceOperationException;
 import com.rsternal.mhbl.main.service.impl.UserServiceImpl;
-
 import dao.model.builders.security.UserBuilder;
 import dao.model.security.User;
+import org.junit.Test;
+import org.junit.runner.RunWith;
+import org.mockito.ArgumentCaptor;
+import org.mockito.InjectMocks;
+import org.mockito.Mock;
+import org.mockito.runners.MockitoJUnitRunner;
+
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
+import java.util.ArrayList;
+import java.util.Calendar;
+import java.util.Date;
+import java.util.GregorianCalendar;
+import java.util.List;
+
+import static org.junit.Assert.*;
+import static org.mockito.Matchers.any;
+import static org.mockito.Matchers.anyString;
+import static org.mockito.Mockito.*;
+import static org.mockito.internal.verification.VerificationModeFactory.times;
 
 @RunWith(MockitoJUnitRunner.class)
 public class UserServiceTest {
@@ -52,7 +43,7 @@ public class UserServiceTest {
     private UserServiceImpl service = new UserServiceImpl();
 
     @SuppressWarnings("unchecked")
-	@Test
+    @Test
     public void shouldAddNewUserWhenGivenUserDoesNotExistInDatabase()
             throws DaoDataNotFoundException, AddServiceOperationException, AddDaoOperationException {
         // given
@@ -108,7 +99,7 @@ public class UserServiceTest {
     }
 
     @SuppressWarnings("unchecked")
-	@Test(expected = AddServiceOperationException.class)
+    @Test(expected = AddServiceOperationException.class)
     public void shouldThrowAddServiceOperationExceptionBecauseInAddMethodInDaoOccuredAnyFailure()
             throws AddDaoOperationException, DaoDataNotFoundException, AddServiceOperationException {
         // given
@@ -301,7 +292,7 @@ public class UserServiceTest {
     }
 
     @SuppressWarnings("unchecked")
-	@Test(expected = UpdateServiceOperationException.class)
+    @Test(expected = UpdateServiceOperationException.class)
     public void shouldThrowUpdateServiceOperationExceptionBecauseGivenUserDoesNotExistInDatabase()
             throws DaoDataNotFoundException, UpdateServiceOperationException, UpdateDaoOperationException {
 
@@ -350,8 +341,8 @@ public class UserServiceTest {
         assertEquals(user.getLogin(), "jas.fasola");
     }
 
-	@SuppressWarnings("unchecked")
-	@Test(expected = ServiceDataNotFoundException.class)
+    @SuppressWarnings("unchecked")
+    @Test(expected = ServiceDataNotFoundException.class)
     public void shouldNotFindUserInDatabaseForGivenUser() throws DaoDataNotFoundException, ServiceDataNotFoundException {
 
         // given
@@ -375,7 +366,7 @@ public class UserServiceTest {
         when(dao.findAll()).thenReturn(users);
 
         // when
-        List<User> foundUsers =  service.findAll();
+        List<User> foundUsers = service.findAll();
 
         // then
         verify(dao).findAll();
@@ -383,7 +374,7 @@ public class UserServiceTest {
     }
 
     @SuppressWarnings("unchecked")
-	@Test(expected = ServiceDataNotFoundException.class)
+    @Test(expected = ServiceDataNotFoundException.class)
     public void shouldNotFindAnyUserBecauseAnyUserExistInDatabase()
             throws DaoDataNotFoundException, ServiceDataNotFoundException {
 
